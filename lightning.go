@@ -1,8 +1,4 @@
-// Copyright 2016 HeadwindFly. All rights reserved.
-// Use of this source code is governed by a BSD-style
-// license that can be found in the LICENSE file.
-
-package clevergo
+package lightning
 
 import (
 	"fmt"
@@ -13,11 +9,12 @@ import (
 
 const (
 	Version = "1.0.0"
-	Logo    = `  ____ _     _______     _______ ____   ____  ___
- / ___| |   | ____\ \   / / ____|  _ \ / ___|/ _ \
-| |   | |   |  _|  \ \ / /|  _| | |_) | |  _| | | |
-| |___| |___| |___  \ V / | |___|  _ <| |_| | |_| |
- \____|_____|_____|  \_/  |_____|_| \_\\____|\___/ `
+	Logo    = `__________        ______ _____       _____
+___  /__(_)______ ___  /___  /__________(_)_____________ _
+__  /__  /__  __  /_  __ \  __/_  __ \_  /__  __ \_  __  /
+_  / _  / _  /_/ /_  / / / /_ _  / / /  / _  / / /  /_/ /
+/_/  /_/  _\__, / /_/ /_/\__/ /_/ /_//_/  /_/ /_/_\__, /
+          /____/                                 /____/`
 )
 
 func Run() {

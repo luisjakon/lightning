@@ -1,13 +1,9 @@
-// Copyright 2016 HeadwindFly. All rights reserved.
-// Use of this source code is governed by a BSD-style
-// license that can be found in the LICENSE file.
-
 package middleware
 
 import (
 	"bytes"
-	"github.com/headwindfly/clevergo"
 	"github.com/headwindfly/jwt"
+	"github.com/luisjakon/lightning"
 )
 
 const (
@@ -33,8 +29,8 @@ func NewJWTMiddleware(jwt *jwt.JWT) JWTMiddleware {
 	}
 }
 
-func (jm JWTMiddleware) Handle(next clevergo.Handler) clevergo.Handler {
-	return clevergo.HandlerFunc(func(ctx *clevergo.Context) {
+func (jm JWTMiddleware) Handle(next lightning.Handler) lightning.Handler {
+	return lightning.HandlerFunc(func(ctx *lightning.Context) {
 		// Try to get JWT raw token from URL query string.
 		rawToken := ctx.FormValue(jm.urlKey)
 		if len(rawToken) == 0 {

@@ -1,8 +1,4 @@
-// Copyright 2016 HeadwindFly. All rights reserved.
-// Use of this source code is governed by a BSD-style
-// license that can be found in the LICENSE file.
-
-package clevergo
+package lightning
 
 import (
 	"encoding/json"
@@ -37,6 +33,18 @@ func (ctx *Context) GetSession() {
 
 func (ctx *Context) SaveSession() error {
 	return ctx.router.sessionStore.Save(&ctx.Response.Header, ctx.Session)
+}
+
+func (ctx *Context) Set(key string, value interface{}) {
+	ctx.SetUserValue(key, value)
+}
+
+func (ctx *Context) Get(key string) interface{} {
+	return ctx.RequestCtx.UserValue(key)
+}
+
+func (ctx *Context) Params(key string) string {
+	return ctx.RouterParams.ByName(key)
 }
 
 func (ctx *Context) JSON(v interface{}) {

@@ -7,7 +7,7 @@ package main
 import (
 	"fmt"
 	"github.com/headwindfly/captcha"
-	"github.com/headwindfly/clevergo"
+	"github.com/luisjakon/lightning"
 	"github.com/valyala/fasthttp"
 	"html/template"
 	"log"
@@ -15,7 +15,7 @@ import (
 
 var formTemplate = template.Must(template.New("example").Parse(formTemplateSrc))
 
-func captchaIndex(ctx *clevergo.Context) {
+func captchaIndex(ctx *lightning.Context) {
 	ctx.Response.Header.Set("Content-Type", "text/html; charset=utf-8")
 	d := struct {
 		CaptchaId string
@@ -28,11 +28,11 @@ func captchaIndex(ctx *clevergo.Context) {
 	}
 }
 
-func captchaDisplay(ctx *clevergo.Context) {
+func captchaDisplay(ctx *lightning.Context) {
 	captcha.ServerFastHTTP(captcha.StdWidth, captcha.StdHeight).ServeFastHTTP(ctx.RequestCtx)
 }
 
-func captchaProcess(ctx *clevergo.Context) {
+func captchaProcess(ctx *lightning.Context) {
 	ctx.Response.Header.Set("Content-Type", "text/html; charset=utf-8")
 	if !captcha.VerifyBytes(string(ctx.FormValue("captchaId")), ctx.FormValue("captchaSolution")) {
 		fmt.Fprintf(ctx, "Wrong captcha solution! No robots allowed!\n")
@@ -44,16 +44,16 @@ func captchaProcess(ctx *clevergo.Context) {
 
 func main() {
 	// Create a router instance.
-	router := clevergo.NewRouter()
+	router := lightning.NewRouter()
 
 	// Register route handler.
-	router.GET("/", clevergo.HandlerFunc(captchaIndex))
-	router.GET("/captcha/:name", clevergo.HandlerFunc(captchaDisplay))
-	router.GET("/process", clevergo.HandlerFunc(captchaProcess))
-	router.POST("/process", clevergo.HandlerFunc(captchaProcess))
+	router.GET("/", lightning.HandlerFunc(captchaIndex))
+	router.GET("/captcha/:name", lightning.HandlerFunc(captchaDisplay))
+	router.GET("/process", lightning.HandlerFunc(captchaProcess))
+	router.POST("/process", lightning.HandlerFunc(captchaProcess))
 
 	// Start server.
-	log.Fatal(clevergo.ListenAndServe(":8080", router.Handler))
+	log.Fatal(lightning.ListenAndServe(":8080", router.Handler))
 }
 
 const formTemplateSrc = `<!doctype html>

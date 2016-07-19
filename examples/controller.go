@@ -1,16 +1,16 @@
 package main
 
 import (
-	"github.com/headwindfly/clevergo"
+	"github.com/luisjakon/lightning"
 	"log"
 )
 
 type UserController struct {
-	clevergo.Controller
+	lightning.Controller
 }
 
-func (c UserController) Handle(next clevergo.Handler) clevergo.Handler {
-	return clevergo.HandlerFunc(func(ctx *clevergo.Context) {
+func (c UserController) Handle(next lightning.Handler) lightning.Handler {
+	return lightning.HandlerFunc(func(ctx *lightning.Context) {
 		// Do anything what you want.
 
 		ctx.Text("Prepare.\n")
@@ -22,41 +22,41 @@ func (c UserController) Handle(next clevergo.Handler) clevergo.Handler {
 	})
 }
 
-func (c UserController) GET(ctx *clevergo.Context) {
+func (c UserController) GET(ctx *lightning.Context) {
 	ctx.Text("GET REQUEST.\n")
 }
 
-func (c UserController) POST(ctx *clevergo.Context) {
+func (c UserController) POST(ctx *lightning.Context) {
 	ctx.Text("POST REQUEST.\n")
 }
 
-func (c UserController) DELETE(ctx *clevergo.Context) {
+func (c UserController) DELETE(ctx *lightning.Context) {
 	ctx.Text("DELETE REQUEST.\n")
 }
 
-func (c UserController) PUT(ctx *clevergo.Context) {
+func (c UserController) PUT(ctx *lightning.Context) {
 	ctx.Text("PUT REQUEST.\n")
 }
 
-func (c UserController) OPTIONS(ctx *clevergo.Context) {
+func (c UserController) OPTIONS(ctx *lightning.Context) {
 	ctx.Text("OPTIONS REQUEST.\n")
 }
 
-func (c UserController) PATCH(ctx *clevergo.Context) {
+func (c UserController) PATCH(ctx *lightning.Context) {
 	ctx.Text("PATCH REQUEST.\n")
 }
 
-func (c UserController) HEAD(ctx *clevergo.Context) {
+func (c UserController) HEAD(ctx *lightning.Context) {
 	ctx.Text("HEAD REQUEST.\n")
 }
 
 func main() {
 	// Create a router instance.
-	router := clevergo.NewRouter()
+	router := lightning.NewRouter()
 
 	// Register route handler.
 	router.RegisterController("/", UserController{})
 
 	// Start server.
-	log.Fatal(clevergo.ListenAndServe(":8080", router.Handler))
+	log.Fatal(lightning.ListenAndServe(":8080", router.Handler))
 }

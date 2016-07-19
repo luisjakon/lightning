@@ -7,8 +7,8 @@ package main
 import (
 	"fmt"
 	"github.com/garyburd/redigo/redis"
-	"github.com/headwindfly/clevergo"
-	"github.com/headwindfly/clevergo/middlewares"
+	"github.com/headwindfly/lightning"
+	"github.com/headwindfly/lightning/middlewares"
 	"github.com/headwindfly/sessions"
 	"log"
 	"time"
@@ -16,7 +16,7 @@ import (
 
 var csrf = middleware.NewCSRFMiddleware()
 
-func CSRFGet(ctx *clevergo.Context) {
+func CSRFGet(ctx *lightning.Context) {
 	ctx.HTML(fmt.Sprintf(`
 	CSRF token: <br>
 	<b>%s</b><br>
@@ -30,13 +30,13 @@ func CSRFGet(ctx *clevergo.Context) {
 	))
 }
 
-func CSRFPost(ctx *clevergo.Context) {
+func CSRFPost(ctx *lightning.Context) {
 	ctx.HTML("Congratulation! Your token is valid.\n")
 }
 
 func main() {
 	// Create a router instance.
-	router := clevergo.NewRouter()
+	router := lightning.NewRouter()
 
 	// Set session store.
 	// Create a redis pool.
@@ -56,7 +56,7 @@ func main() {
 	// Create a redis session store.
 	store := sessions.NewRedisStore(redisPool, sessions.Options{
 		MaxAge: 3600 * 24 * 7, // 10 seconds.
-		// Domain:".clevergo.dev",
+		// Domain:".lightning.dev",
 		// HttpOnly:true,
 		// Secure:true,
 	})
@@ -68,9 +68,9 @@ func main() {
 	router.AddMiddleware(csrf)
 
 	// Register route handler.
-	router.GET("/", clevergo.HandlerFunc(CSRFGet))
-	router.POST("/", clevergo.HandlerFunc(CSRFPost))
+	router.GET("/", lightning.HandlerFunc(CSRFGet))
+	router.POST("/", lightning.HandlerFunc(CSRFPost))
 
 	// Start server.
-	log.Fatal(clevergo.ListenAndServe(":8080", router.Handler))
+	log.Fatal(lightning.ListenAndServe(":8080", router.Handler))
 }

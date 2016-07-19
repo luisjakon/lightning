@@ -1,14 +1,10 @@
-// Copyright 2016 HeadwindFly. All rights reserved.
-// Use of this source code is governed by a BSD-style
-// license that can be found in the LICENSE file.
-
 package middleware
 
 import (
 	"errors"
-	"github.com/headwindfly/clevergo"
 	"github.com/headwindfly/csrf"
 	"github.com/headwindfly/utils"
+	"github.com/luisjakon/ligthning"
 )
 
 const key = "_csrf"
@@ -49,8 +45,8 @@ func NewCSRFMiddleware() CSRFMiddleware {
 	}
 }
 
-func (m CSRFMiddleware) Handle(next clevergo.Handler) clevergo.Handler {
-	return clevergo.HandlerFunc(func(ctx *clevergo.Context) {
+func (m CSRFMiddleware) Handle(next ligthning.Handler) ligthning.Handler {
+	return ligthning.HandlerFunc(func(ctx *ligthning.Context) {
 		if ctx.Session == nil {
 			ctx.GetSession()
 			defer ctx.SaveSession()
@@ -81,7 +77,7 @@ func (m CSRFMiddleware) Handle(next clevergo.Handler) clevergo.Handler {
 
 // Get token from session.
 // Returns non-nil error if the token does not exists or invalid.
-func (m CSRFMiddleware) Token(ctx *clevergo.Context) ([]byte, error) {
+func (m CSRFMiddleware) Token(ctx *ligthning.Context) ([]byte, error) {
 	token, err := ctx.Session.Get(m.SessionKey)
 	if (err != nil) || (token == nil) {
 		return utils.RandomBytes(m.Len), errTokenNotExists

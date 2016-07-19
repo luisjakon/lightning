@@ -7,16 +7,16 @@ package main
 import (
 	"fmt"
 	"github.com/garyburd/redigo/redis"
-	"github.com/headwindfly/clevergo"
 	"github.com/headwindfly/sessions"
+	"github.com/luisjakon/lightning"
 	"log"
 	"math/rand"
 	"time"
 )
 
-var router *clevergo.Router
+var router *lightning.Router
 
-func getSession(ctx *clevergo.Context) {
+func getSession(ctx *lightning.Context) {
 	// Get session.
 	ctx.GetSession()
 	defer ctx.SaveSession()
@@ -31,7 +31,7 @@ func getSession(ctx *clevergo.Context) {
 	fmt.Fprintf(ctx, "If it does not work, make sure that your redis-server is started.")
 }
 
-func setSession(ctx *clevergo.Context) {
+func setSession(ctx *lightning.Context) {
 	// Get session.
 	ctx.GetSession()
 	defer ctx.SaveSession()
@@ -45,7 +45,7 @@ func setSession(ctx *clevergo.Context) {
 
 func main() {
 	// Create a router instance.
-	router = clevergo.NewRouter()
+	router = lightning.NewRouter()
 
 	// Create a redis pool.
 	redisPool := &redis.Pool{
@@ -64,7 +64,7 @@ func main() {
 	// Create a redis session store.
 	store := sessions.NewRedisStore(redisPool, sessions.Options{
 		MaxAge: 3600 * 24 * 7, // 10 seconds.
-		// Domain:".clevergo.dev",
+		// Domain:".lightning.dev",
 		// HttpOnly:true,
 		// Secure:true,
 	})
@@ -73,9 +73,9 @@ func main() {
 	router.SetSessionStore(store)
 
 	// Register route handler.
-	router.GET("/", clevergo.HandlerFunc(getSession))
-	router.GET("/random", clevergo.HandlerFunc(setSession))
+	router.GET("/", lightning.HandlerFunc(getSession))
+	router.GET("/random", lightning.HandlerFunc(setSession))
 
 	// Start server.
-	log.Fatal(clevergo.ListenAndServe(":8080", router.Handler))
+	log.Fatal(lightning.ListenAndServe(":8080", router.Handler))
 }

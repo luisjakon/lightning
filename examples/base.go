@@ -1,19 +1,19 @@
-// Copyright 2016 HeadwindFly. All rights reserved.
+// Copyright 2016 Bolt. All rights reserved.
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
 package main
 
 import (
-	"github.com/headwindfly/clevergo"
+	"github.com/luisjakon/lightning"
 	"log"
 	"os"
 	"path"
 )
 
 var (
-	helloCleverGo = []byte("Hello CleverGo!\n")
-	resourcesPath = path.Join(os.Getenv("GOPATH"), "src", "github.com", "headwindfly", "clevergo", "examples")
+	helloLightning = []byte("Hello Lightning!\n")
+	resourcesPath  = path.Join(os.Getenv("GOPATH"), "src", "github.com", "luisjakon", "lightning", "examples")
 )
 
 type User struct {
@@ -21,66 +21,66 @@ type User struct {
 	Team string `json:"team" xml:"team"`
 }
 
-func hello(ctx *clevergo.Context) {
-	ctx.Write(helloCleverGo)
+func hello(ctx *lightning.Context) {
+	ctx.Write(helloLightning)
 }
 
-func html(ctx *clevergo.Context) {
-	ctx.HTML("Hello CleverGo!\n")
+func html(ctx *lightning.Context) {
+	ctx.HTML("Hello Lightning!\n")
 }
 
-func json(ctx *clevergo.Context) {
+func json(ctx *lightning.Context) {
 	ctx.JSON(User{
-		Name: "HeadwindFly",
-		Team: "CleverGo",
+		Name: "Bolt",
+		Team: "Lightning",
 	})
 }
 
-func jsonp(ctx *clevergo.Context) {
+func jsonp(ctx *lightning.Context) {
 	callback := ctx.FormValue("callback")
 	ctx.JSONP(User{
-		Name: "HeadwindFly",
-		Team: "CleverGo",
+		Name: "Bolt",
+		Team: "Lightning",
 	}, callback)
 }
 
-func xml(ctx *clevergo.Context) {
+func xml(ctx *lightning.Context) {
 	ctx.XML(User{
-		Name: "HeadwindFly",
-		Team: "CleverGo",
+		Name: "Bolt",
+		Team: "Lightning",
 	}, "")
 }
 
-func params(ctx *clevergo.Context) {
+func params(ctx *lightning.Context) {
 	name := ctx.RouterParams.ByName("name")
 	ctx.Textf("Hello %s.", name)
 }
 
-func multiParams(ctx *clevergo.Context) {
-	param1 := ctx.RouterParams.ByName("param1")
-	param2 := ctx.RouterParams.ByName("param2")
+func multiParams(ctx *lightning.Context) {
+	param1 := ctx.Params("param1")
+	param2 := ctx.Params("param2")
 	ctx.Textf("Your params is %s and %s", param1, param2)
 }
 
 func main() {
 	// Create a router instance.
-	router := clevergo.NewRouter()
+	router := lightning.NewRouter()
 
 	// Register route handler.
-	router.GET("/", clevergo.HandlerFunc(hello))
-	router.GET("/html", clevergo.HandlerFunc(html))
-	router.GET("/json", clevergo.HandlerFunc(json))
-	router.GET("/jsonp", clevergo.HandlerFunc(jsonp))
-	router.GET("/xml", clevergo.HandlerFunc(xml))
+	router.GET("/", lightning.HandlerFunc(hello))
+	router.GET("/html", lightning.HandlerFunc(html))
+	router.GET("/json", lightning.HandlerFunc(json))
+	router.GET("/jsonp", lightning.HandlerFunc(jsonp))
+	router.GET("/xml", lightning.HandlerFunc(xml))
 	// Navigate to http://127.0.0.1:8080/params/yourname.
-	router.GET("/params/:name", clevergo.HandlerFunc(params))
+	router.GET("/params/:name", lightning.HandlerFunc(params))
 	// Navigate to http://127.0.0.1:8080/multi-params/param1/param2.
-	router.GET("/multi-params/:param1/:param2", clevergo.HandlerFunc(multiParams))
+	router.GET("/multi-params/:param1/:param2", lightning.HandlerFunc(multiParams))
 
 	// Static resource files.
 	// Navigate to http://127.0.0.1:8080/examples/base.go
 	router.ServeFiles("/examples/*filepath", resourcesPath)
 
 	// Start server.
-	log.Fatal(clevergo.ListenAndServe(":8080", router.Handler))
+	log.Fatal(lightning.ListenAndServe(":8080", router.Handler))
 }

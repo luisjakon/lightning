@@ -6,7 +6,7 @@ package main
 
 import (
 	"fmt"
-	"github.com/headwindfly/clevergo"
+	"github.com/lightning/lightning"
 	"log"
 )
 
@@ -14,8 +14,8 @@ import (
 type FirstMiddleware struct {
 }
 
-func (fm *FirstMiddleware) Handle(next clevergo.Handler) clevergo.Handler {
-	return clevergo.HandlerFunc(func(ctx *clevergo.Context) {
+func (fm *FirstMiddleware) Handle(next lightning.Handler) lightning.Handler {
+	return lightning.HandlerFunc(func(ctx *lightning.Context) {
 		fmt.Fprint(ctx, "I am First Middleware!\n")
 		// Invoke the next middleware
 		next.Handle(ctx)
@@ -26,29 +26,29 @@ func (fm *FirstMiddleware) Handle(next clevergo.Handler) clevergo.Handler {
 type SecondMiddleware struct {
 }
 
-func (sm *SecondMiddleware) Handle(next clevergo.Handler) clevergo.Handler {
-	return clevergo.HandlerFunc(func(ctx *clevergo.Context) {
+func (sm *SecondMiddleware) Handle(next lightning.Handler) lightning.Handler {
+	return lightning.HandlerFunc(func(ctx *lightning.Context) {
 		fmt.Fprint(ctx, "I am Second Middleware!\n")
 		// Invoke the next middleware
 		next.Handle(ctx)
 	})
 }
 
-func middleware(ctx *clevergo.Context) {
-	fmt.Fprint(ctx, "Hello CleverGo!\n")
+func middleware(ctx *lightning.Context) {
+	fmt.Fprint(ctx, "Hello Lightning!\n")
 }
 
 func main() {
 	// Create a router instance.
-	router := clevergo.NewRouter()
+	router := lightning.NewRouter()
 
 	// Add middleware before registering route's handler.
 	router.AddMiddleware(&FirstMiddleware{})
 	router.AddMiddleware(&SecondMiddleware{})
 
 	// Register route handler.
-	router.GET("/", clevergo.HandlerFunc(middleware))
+	router.GET("/", lightning.HandlerFunc(middleware))
 
 	// Start server.
-	log.Fatal(clevergo.ListenAndServe(":8080", router.Handler))
+	log.Fatal(lightning.ListenAndServe(":8080", router.Handler))
 }

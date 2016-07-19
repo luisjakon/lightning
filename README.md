@@ -1,27 +1,23 @@
-# CleverGo
-**CleverGo** is a **simple**, **high performance** and **secure** web framework for Golang. 
-This project aims to become a powerful web development tool and 
+# Lightning
+**Lightning** is a **simple**, **high performance** and **secure** web framework for Golang.
+This project aims to become a powerful web development tool and
 make developer easily to build a high-performance, secure and stronger web application.
 
 **This project has just been launched, if you find a bug , please tell me,
  I will fix it as soon as possible.**
 
-**And all comments or suggestions regarding CleverGo web framework are welcome. :)**
-
-# Official Website
-**https://headwindfly.com**
-This site powered by CleverGo, a **LIVE DEMO** of CleverGo.
+**And all comments or suggestions regarding Lightning web framework are welcome. :)**
 
 # Features
 - **high performance**
 
-CleverGo uses **fasthttp** instead of **net/http**, so it is more fast than net/http‘s frameworks,
+Lightning uses **fasthttp** instead of **net/http**, so it is more fast than net/http‘s frameworks,
 and not only that, it uses [**fasthttprouter**](https://github.com/buaazp/fasthttprouter) as handler's router,
 and it's architecture is very simple, so it run fast.
 
 - **lightweight**
 
-CleverGo's architecture is very simple, such as the design of the [**Middleware**](middleware.go).
+Lightning's architecture is very simple, such as the design of the [**Middleware**](middleware.go).
 
 - **easy to use**
 

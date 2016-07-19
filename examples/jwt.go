@@ -6,9 +6,9 @@ package main
 
 import (
 	"crypto"
-	"github.com/headwindfly/clevergo"
-	"github.com/headwindfly/clevergo/middlewares"
 	"github.com/headwindfly/jwt"
+	"github.com/luisjakon/lightning"
+	"github.com/luisjakon/lightning/middlewares"
 	"log"
 	"math/rand"
 	"strconv"
@@ -16,7 +16,7 @@ import (
 
 var (
 	ttl = int64(20)
-	j   = jwt.NewJWT("CleverGo", ttl)
+	j   = jwt.NewJWT("Lightning", ttl)
 )
 
 func init() {
@@ -28,8 +28,8 @@ func init() {
 	j.AddAlgorithm("HS256", hs256)
 }
 
-func jwtGet(ctx *clevergo.Context) {
-	token, err := j.NewToken("HS256", "CleverGO", "audience"+strconv.Itoa(rand.Intn(100)))
+func jwtGet(ctx *lightning.Context) {
+	token, err := j.NewToken("HS256", "Lightning", "audience"+strconv.Itoa(rand.Intn(100)))
 	if err != nil {
 		ctx.Textf("Failed to generate token: %s", err.Error())
 		return
@@ -38,27 +38,27 @@ func jwtGet(ctx *clevergo.Context) {
 	ctx.Textf("JWT token(effective within %d seconds):\n%s", ttl, token.Raw.Token())
 }
 
-func jwtVerify(ctx *clevergo.Context) {
+func jwtVerify(ctx *lightning.Context) {
 	ctx.Text("Congratulation! Your token is valid.")
 }
 
 func main() {
 	// Create a router instance.
-	router := clevergo.NewRouter()
+	router := lightning.NewRouter()
 
 	// Note that.
 	// Before registering middleware, we should register jwtGet handler first.
 	// In order to cross over the JWT Middleware,
 	// otherwise the jwtGet handler will be blocked by the JWT Middleware.
-	router.GET("/", clevergo.HandlerFunc(jwtGet))
+	router.GET("/", lightning.HandlerFunc(jwtGet))
 
 	// Add JWT Middleware
 	router.AddMiddleware(middleware.NewJWTMiddleware(j))
 
 	// Register route handler.
-	router.GET("/verify", clevergo.HandlerFunc(jwtVerify))
-	router.POST("/verify", clevergo.HandlerFunc(jwtVerify))
+	router.GET("/verify", lightning.HandlerFunc(jwtVerify))
+	router.POST("/verify", lightning.HandlerFunc(jwtVerify))
 
 	// Start server.
-	log.Fatal(clevergo.ListenAndServe(":8080", router.Handler))
+	log.Fatal(lightning.ListenAndServe(":8080", router.Handler))
 }
